@@ -33,6 +33,15 @@ XINPUT_STATE controller; //the controller state struct
 
 bool triggerKeyboard = false; //triggers the keyboard to start
 
+struct repeatTime
+{
+	long long now;
+	long long nowPlusDelay;
+};
+
+repeatTime buttonTime;
+repeatTime mouseTime;
+
 #define _esc -1
 #define _keyboard 0
 #define _a 1

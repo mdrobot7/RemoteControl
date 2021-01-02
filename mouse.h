@@ -7,7 +7,8 @@
 #define rstickX controller.Gamepad.sThumbRX
 #define rstickY controller.Gamepad.sThumbRY
 
-float speed = 1;
+using namespace std::chrono;
+
 float slope = 0;
 //for a description on the angles, see the block comment at the bottom
 
@@ -63,7 +64,13 @@ void handleMouse()
     {
         return;
     }
-    speed = sqrt(pow(lstickX, 2) + pow(lstickY, 2)); //distance formula (from origin to current stick pos) div. by 10 to scale the value
+    int distance = sqrt(pow(lstickX, 2) + pow(lstickY, 2)); //distance formula (from origin to current stick pos) div. by 10 to scale the value
+    distance = distance - deadzone; //get rid of the deadzone, make distance = 0 the edge of the deadzone
+    distance = distance / 100; //scale the distance down to a more manageable value and truncate
+    int delay = pow(1.0083, -distance + 360);
+    mouseTime.nowPlusDelay = mouseTime.now + delay;
+    if (duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() < mouseTime.nowPlusDelay) return;
+
     if (lstickX != 0 && lstickY != 0)
     {
         slope = float(lstickY) / float(lstickX);
@@ -81,6 +88,7 @@ void handleMouse()
     }
     else;
     setCursorRelative(_cursorX[zone], -_cursorY[zone]);
+    mouseTime.now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
 void handleScrolling()
@@ -118,8 +126,9 @@ the imaginary line. To do this, it finds what 'region' the point is in, by findi
 
 With the region number, then you can finally move the mouse to the corresponding dot on the square.
 
-The speed of the mouse movement is done by calculating the result of the distance formula between (0,0) and (lstickX, lstickY), and plugging it into a
-formula to scale it down to an appropriate delay amount.
+The speed of the mouse movement is done by calculating the result of the distance formula between (0,0) and (lstickX, lstickY), and plugging it into an
+exponential decay function with a max of 20 and a min of 1 (to reflect the max delay value I want and the min delay value possible) to get the delay.
+Delay is the reverse of speed, so that's why it's exponential decay rather than growth (as speed goes up, delay goes down)
 
 ====================================================================
 

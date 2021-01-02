@@ -12,11 +12,11 @@ TODO:
 -fix keyboard -- DONE!
 -add a different controller layout for when the keyboard is up (arrow keys, shift, etc) -- DONE!
 -fix symbol button on keyboard -- DONE!
--mouse speed variable
--mouse acceleration curve? might not be necessary, since the speed variable already exists
+-mouse speed variable -- DONE!!!
+-mouse acceleration curve? might not be necessary, since the speed variable already exists -- DONE!!!!!
 -page scrolling (with inputs and the scroll wheel) -- DONE!
 -show where the mouse is (like in the windows settings) with r stick down
--enable/disable controller
+-enable/disable controller -- DONE!
 -TEST!
 */
 
@@ -32,35 +32,22 @@ int main()
 	//print the button mappings and info here
 	cout << "----------------------------------------------------\n" << endl;
 
-	now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-
-	bool x[1] = { true };
-	SystemParametersInfoA(SPI_SETMOUSESONAR, 0, (bool *) *x, SPIF_UPDATEINIFILE);
-	Sleep(5000);
-	ZeroMemory(&input, sizeof(INPUT));
-	input.type = INPUT_KEYBOARD;
-	input.ki.wVk = VK_LCONTROL;
-	//comment added here
-	input.ki.dwFlags = 0; //0 for a keypress
-	SendInput(1, &input, sizeof(INPUT));
-	Sleep(100);
-
-	input.ki.dwFlags = KEYEVENTF_KEYUP; //this or 0x0002 for a key up
-	SendInput(1, &input, sizeof(INPUT));
-	Sleep(100);
+	buttonTime.now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	mouseTime.now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 	
-	cout << "Done";
-	x[0] = false;
-	SystemParametersInfoA(SPI_SETMOUSESONAR, 0, (bool *) *x, SPIF_UPDATEINIFILE);
-	while (true);
-
 	while (true)
 	{
-		handleKeyboard();
-		handleMouse();
-		handleScrolling();
-		handleButtons();
-		Sleep(2);
+		while (handleDisable() == false)
+		{
+			handleKeyboard();
+			handleMouse();
+			handleScrolling();
+			handleButtons();
+			Sleep(1);
+		}
+		while (handleDisable() == true) Sleep(1); //while the disable button is still being pressed
+		while (handleDisable() == false) Sleep(1); //while the disable button hasn't been pressed yet
+		while (handleDisable() == true) Sleep(1); //while the disable button is being pressed
 	}
 	return 0;
 }

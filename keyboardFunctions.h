@@ -72,7 +72,6 @@ void handleJoystick(BYTE left, BYTE right, BYTE up, BYTE down, BYTE upleft, BYTE
 		if ((controller.Gamepad.wButtons == lastControllerState || lastControllerState == -1 || lastControllerState == -2)
 			&& (controller.Gamepad.wButtons != 0 || button(XINPUT_GAMEPAD_LTRIGGER) || button(XINPUT_GAMEPAD_RTRIGGER))) //if lastControllerState is flagged and the buttons are still being pushed
 		{
-			cout << lastButton << ", " << repeatDelays(lastButton, 1) << endl;
 			if (duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() <= nowPlusDelay) continue; //if the timer hasn't expired yet, return the function and try again
 			//repeat the keystroke, unless it's a mouse keystroke. in that case, just hold the keystroke as is, and return; the function.
 			//reset the timer
@@ -88,7 +87,7 @@ void handleJoystick(BYTE left, BYTE right, BYTE up, BYTE down, BYTE upleft, BYTE
 			{
 				if (button(_xinputButtonCodes[i]))
 				{
-					if (keyMappings(i, 1) == -1)
+					if (keyMappings(i, 1) == -1) //the button mapping to close the keyboard (-1, or -0x01)
 					{
 						currentLetter = _esc;
 						return;
@@ -98,6 +97,11 @@ void handleJoystick(BYTE left, BYTE right, BYTE up, BYTE down, BYTE upleft, BYTE
 						SetCursorPos(xCoordinates(_shift), yCoordinates(_shift));
 						doInput(VK_LBUTTON, true);
 						SetCursorPos(xCoordinates(currentLetter), yCoordinates(currentLetter));
+					}
+					else if (keyMappings(i, 1) == VK_RETURN) //close the keyboard if return is pressed
+					{
+						currentLetter = _esc;
+						return;
 					}
 					else doInput(keyMappings(i, 1), true);
 					if (keyMappings(i, 1) == VK_LBUTTON && currentLetter == _symbol) //PROBLEM IS IN HERE SOMEWHERE

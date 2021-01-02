@@ -11,6 +11,6 @@ Right-Bumper,0,100
 A,0x01,175
 B,0x10,350
 X,0x0D,400
-Y,-1,100
+Y,-0x01,100
 Left-Trigger,0x20,300
 Right-Trigger,0x08,200
