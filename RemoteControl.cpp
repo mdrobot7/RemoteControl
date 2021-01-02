@@ -40,6 +40,7 @@ int main()
 	ZeroMemory(&input, sizeof(INPUT));
 	input.type = INPUT_KEYBOARD;
 	input.ki.wVk = VK_LCONTROL;
+	//comment added here
 	input.ki.dwFlags = 0; //0 for a keypress
 	SendInput(1, &input, sizeof(INPUT));
 	Sleep(100);
