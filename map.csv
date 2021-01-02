@@ -1,0 +1,16 @@
+DPad-Up,0xAF,325
+DPad-Down,0xAE,300
+DPad-Left,0xAD,400
+DPad-Right,0xB3,400
+Start,0x5B,400
+Back,0x1B,400
+Left-Stick-Click,0x04,400
+Right-Stick-Click,-0x03,100
+Left-Bumper,0xA6,350
+Right-Bumper,0xA7,350
+A,0x01,250
+B,0x02,250
+X,0x0D,300
+Y,-0x01,100
+Left-Trigger,0x08,225
+Right-Trigger,0x20,275
