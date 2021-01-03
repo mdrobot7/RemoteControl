@@ -7,16 +7,7 @@
 
 /*
 TODO:
--handle triggers in the handleButtons() function -- DONE!
--handle repeated mouse clicks in the handleButtons() function (make them not repeat, and for the click to hold as the button is held) -- DONE!
--fix keyboard -- DONE!
--add a different controller layout for when the keyboard is up (arrow keys, shift, etc) -- DONE!
--fix symbol button on keyboard -- DONE!
--mouse speed variable -- DONE!!!
--mouse acceleration curve? might not be necessary, since the speed variable already exists -- DONE!!!!!
--page scrolling (with inputs and the scroll wheel) -- DONE!
 -show where the mouse is (like in the windows settings) with r stick down
--enable/disable controller -- DONE!
 -TEST!
 */
 
@@ -34,6 +25,8 @@ int main()
 
 	buttonTime.now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 	mouseTime.now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+
+	initFiles();
 	
 	while (true)
 	{

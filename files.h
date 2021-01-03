@@ -32,22 +32,6 @@ void waitForRelease()
 	}
 }
 
-void initFiles()
-{
-	pos.open("pos.csv", ios::out);
-	map.open("map.csv", ios::out);
-	if (!pos || !map)
-	{
-		cout << "Error creating the files!\n";
-		return;
-	}
-	pos.close();
-	map.close();
-	map.open("map2.csv", ios::out);
-	if (!map) { cout << "Error creating the files!\n"; return; }
-	map.close();
-}
-
 void createPosFile()
 {
 	incrementer = 0;
@@ -170,47 +154,46 @@ int yCoordinates(int key)
 
 void createMapFile(int _map)
 {
-	if (_map == 0) map.open("map.csv", ios::out);
-	else if (_map == 1) map.open("map2.csv", ios::out);
-	else return;
-	HANDLE hstdin;
-	DWORD  consoleMode;
-
-	hstdin = GetStdHandle(STD_INPUT_HANDLE);
-	GetConsoleMode(hstdin, &consoleMode);
-	SetConsoleMode(hstdin, ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT);
-
-	char letter;
-	incrementer = 0;
-
-	map << buttons[0] << "," << "0xAF" << endl; //volume up
-	map << buttons[1] << "," << "0xAE" << endl; //volume down
-	map << buttons[2] << "," << "0xAD" << endl; //volume mute
-	map << buttons[3] << "," << "0xB3" << endl; //play/pause
-	map << buttons[4] << "," << "0x5B" << endl; //left windows key
-	map << buttons[5] << "," << "0x1B" << endl; //esc
-	map << buttons[6] << "," << "0x04" << endl; //middle mouse click
-	map << buttons[7] << "," << "0" << endl; //i don't have any keys to assign here
-	map << buttons[8] << "," << "0xA6" << endl; //browser back
-	map << buttons[9] << "," << "0xA7" << endl; //browser forward
-	map << buttons[10] << "," << "0x01" << endl; //left click
-	map << buttons[11] << "," << "0x02" << endl; //right click
-	map << buttons[12] << "," << "0x0D" << endl; //enter
-	map << buttons[13] << "," << "0" << endl; //keyboard trigger button
-	map << buttons[14] << "," << "0x08" << endl; //backspace
-	map << buttons[15] << "," << "0x20" << endl; //space
-	
-
-	/*cout << "Press the key on your keyboard or mouse that you want to\nbind to the appropriate controller button below:\n" << flush;
-	while (incrementer < sizeof(buttons))
+	if (_map == 0)
 	{
-		cout << buttons[incrementer] << ": " << flush;
-		cin.get(letter);
-		cout << letter << endl;
-		map << buttons[incrementer] << "," << letter << endl;
-	}*/
-
-	SetConsoleMode(hstdin, consoleMode); //when you're done, to set the console back to the original state
+		map.open("map.csv", ios::out);
+		map << buttons[0] << "," << "0xAF" << "," << "325" << endl; //volume up
+		map << buttons[1] << "," << "0xAE" << "," << "300" << endl; //volume down
+		map << buttons[2] << "," << "0xAD" << "," << "400" << endl; //volume mute
+		map << buttons[3] << "," << "0xB3" << "," << "400" << endl; //play/pause
+		map << buttons[4] << "," << "0x5B" << "," << "400" << endl; //left windows key
+		map << buttons[5] << "," << "0x1B" << "," << "400" << endl; //esc
+		map << buttons[6] << "," << "0x04" << "," << "400" << endl; //middle mouse click
+		map << buttons[7] << "," << "-0x03" << "," << "100" << endl; //show cursor
+		map << buttons[8] << "," << "0xA6" << "," << "350" << endl; //browser back
+		map << buttons[9] << "," << "0xA7" << "," << "350" << endl; //browser forward
+		map << buttons[10] << "," << "0x01" << "," << "250" << endl; //left click
+		map << buttons[11] << "," << "0x02" << "," << "250" << endl; //right click
+		map << buttons[12] << "," << "0x0D" << "," << "300" << endl; //enter
+		map << buttons[13] << "," << "-0x01" << "," << "100" << endl; //keyboard trigger button
+		map << buttons[14] << "," << "0x20" << "," << "225" << endl; //space
+		map << buttons[15] << "," << "0x08" << "," << "275" << endl; //backspace
+	}
+	if (_map == 1)
+	{
+		map.open("map2.csv", ios::out);
+		map << buttons[0] << "," << "0x26" << "," << "275" << endl; //up arrow
+		map << buttons[1] << "," << "0x28" << "," << "275" << endl; //down arrow
+		map << buttons[2] << "," << "0x25" << "," << "275" << endl; //left arrow
+		map << buttons[3] << "," << "0x27" << "," << "275" << endl; //right arrow
+		map << buttons[4] << "," << "0" << "," << "100" << endl;
+		map << buttons[5] << "," << "0" << "," << "100" << endl;
+		map << buttons[6] << "," << "0" << "," << "100" << endl;
+		map << buttons[7] << "," << "0" << "," << "100" << endl;
+		map << buttons[8] << "," << "0" << "," << "100" << endl;
+		map << buttons[9] << "," << "0" << "," << "100" << endl;
+		map << buttons[10] << "," << "0x01" << "," << "175" << endl; //select
+		map << buttons[11] << "," << "0x10" << "," << "350" << endl; //shift
+		map << buttons[12] << "," << "0x0D" << "," << "400" << endl; //enter and close
+		map << buttons[13] << "," << "-0x01" << "," << "100" << endl; //keyboard trigger button
+		map << buttons[14] << "," << "0x20" << "," << "300" << endl; //space
+		map << buttons[15] << "," << "0x08" << "," << "200" << endl; //backspace
+	}
 	map.close();
 }
 
@@ -286,3 +269,64 @@ TL;DR -- it's a convenient way to manipulate strings
 Other info - you can look into stoi() and atoi() functions
 Source: https://www.geeksforgeeks.org/converting-strings-numbers-cc/
 */
+
+//=====================================================================================================================================================//
+
+void initFiles()
+{
+	pos.open("pos.csv");
+	if (!pos)
+	{
+		cout << "Keyboard position (pos.csv) file doesn't exist. The program will not work correctly without it.\n";
+		cout << "Remaking keyboard position file...\n";
+		pos.open("pos.csv", ios::out);
+		if (!pos)
+		{
+			cout << "Error creating the file!\n";
+			return;
+		}
+		cout << "Make sure to have the Touch Keyboard button available on the taskbar before starting.\n";
+		cout << "Press [Enter] when you are ready to begin.";
+		while (cin.get() != '\n')
+		{
+			Sleep(1);
+		}
+		cout << endl;
+		createPosFile();
+	}
+	pos.close();
+	map.open("map.csv");
+	if (!map)
+	{
+		cout << "Button mapping file 1 (map.csv) doesn't exist. The program will not work correctly without it.\n";
+		cout << "This button mapping file will be used when the on-screen keyboard is not up.\n";
+		cout << "Remaking button mapping file...\n";
+		map.open("map.csv", ios::out);
+		if (!map)
+		{
+			cout << "Error creating the file!\n";
+			return;
+		}
+		map.close();
+		createMapFile(0);
+	}
+	map.close();
+	map.open("map2.csv");
+	if (!map)
+	{
+		cout << "Button mapping file 2 (map2.csv) doesn't exist. The program will not work correctly without it.\n";
+		cout << "This button mapping file will be used when the on-screen keyboard is active.\n";
+		cout << "Remaking button mapping file...\n";
+		map.open("map2.csv", ios::out);
+		if (!map)
+		{
+			cout << "Error creating the file!\n";
+			return;
+		}
+		map.close();
+		createMapFile(1);
+	}
+	map.close();
+	cout << "All files are present.\n";
+	cout << "To edit the button mapping files, open them in Notepad.\n";
+}

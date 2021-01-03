@@ -12,5 +12,5 @@ A,0x01,250
 B,0x02,250
 X,0x0D,300
 Y,-0x01,100
-Left-Trigger,0x08,225
-Right-Trigger,0x20,275
+Left-Trigger,0x20,225
+Right-Trigger,0x08,275
